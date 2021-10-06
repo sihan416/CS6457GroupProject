@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class DestructableController : MonoBehaviour
 {
-    public GameObject coinPrefab;
+    public GameObject destroyed;
+    public GameObject pickup;
     // Start is called before the first frame update
     void Start()
     {
-        // this/DestroySelf are just for testing/demo the destroy -> drop coin interaction
-        // Invoke("DestroySelf", 2f);
+
     }
 
     void DestroySelf()
@@ -19,7 +19,21 @@ public class DestructableController : MonoBehaviour
 
     private void OnDisable()
     {
-        // init coin
-        GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.Euler(90, 90, 0)) as GameObject;
+        GameObject debris = Instantiate(destroyed, transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+        for (var i = 0; i < debris.transform.childCount; i++)
+        {
+            GameObject debrisPiece = debris.transform.GetChild(i).gameObject;
+            switch(Random.Range(0, 3))
+            {
+                case 2:
+                    Destroy(debrisPiece);
+                    break;
+                default:
+                    break;
+            }
+
+            Destroy(debrisPiece, 3f);
+        }
+        GameObject powerup = Instantiate(pickup, transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
     }
 }
